@@ -1,0 +1,9 @@
+<Panel ux:Class="Component.SearchBtn" Width="74" Height="25">
+	<FileSource  ux:Property="Path" />
+	<FileSource  ux:Property="Path2" />
+
+    <Image ux:Name="img" File="{Property this.Path}" />
+    <WhilePressed>
+    	<Change img.File="{Property this.Path2}"/>
+    </WhilePressed>
+</Panel>

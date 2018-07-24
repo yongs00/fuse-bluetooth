@@ -1,0 +1,23 @@
+<App ux:AutoCtor="false">
+	<iOS.StatusBarConfig Style="Light" />
+	<Android.StatusBarConfig Color="#022328" />
+
+	<Router ux:Name="router" />
+
+	<ClientPanel>
+
+		<Busy ux:Name="isBusy" IsActive="false" />
+		<WhileBusy>
+			<Change loadingPanel.Opacity="1" Duration=".4" />
+			<Change ng.IsEnabled="false" />
+		</WhileBusy>
+		<MyLoadingIndicator ux:Name="loadingPanel" Opacity="0" ThemeColor="#000" />
+
+		<Navigator ux:Name="ng" DefaultPath="btlList">
+			<Pages.BltList ux:Template="btlList" router="router" isBusy="isBusy" />
+			<Pages.BltControl ux:Template="btlControl" router="router" />
+		</Navigator>
+
+	</ClientPanel>
+
+</App>

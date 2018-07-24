@@ -1,0 +1,12 @@
+<Panel ux:Class="Component.LBtn" Margin="5">
+	<FileSource  ux:Property="Path" />
+	<FileSource  ux:Property="Path2" />
+
+    <Image ux:Name="img" File="{Property this.Path}" Width="143" Height="66"/>
+    <WhilePressed>
+    	<Change img.File="{Property this.Path2}"/>
+    </WhilePressed>
+    <Clicked>
+        <Callback Handler="{btnClicked}" />
+    </Clicked>
+</Panel>

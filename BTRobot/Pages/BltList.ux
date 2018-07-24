@@ -1,0 +1,62 @@
+<Panel ux:Class="Pages.BltList">
+	<Router ux:Dependency="router" />
+	<Busy ux:Dependency="isBusy"/>
+
+	<JavaScript File="BltList.js" />
+
+	<Activated>
+		<Callback Handler="{onActivated}" />
+	</Activated>
+
+	<!-- <Busy ux:Name="isBusy" IsActive="false" />
+	<WhileBusy>
+		<Change loadingPanel.Opacity="1" Duration=".4" />
+		<Change rctDevice.IsEnabled="false" />
+	</WhileBusy>
+	<MyLoadingIndicator ux:Name="loadingPanel" Opacity="0" ThemeColor="#000" /> -->
+	
+	<Image File="../Assets/logo.png" Width="112" Height="53" Alignment="Top" Margin="0, 30, 0, 0" />	
+
+	<Rectangle ux:Name="rctDevice" Color="#fff" Margin="27,121,27,0" CornerRadius="10,10,0,0" IsEnabled="true">
+		<ScrollView>
+		<StackPanel Margin="10" ItemSpacing="19">
+			<!-- <StackPanel Orientation="Horizontal">
+				<Button Height="40" Width="100" Color="#5D6BA9" Text="블루투스 검색" Clicked="{scanStart}" />
+				<Button Height="40" Width="100" Color="#F83F6A" Text="페어링 목록" Clicked="{getListPairedDevice}" />
+			</StackPanel> -->
+			
+			<Text Color="#808080" FontSize="20" Margin="10,0">Connected a device</Text>
+			
+			<Each Items="{bles}">
+				<StackPanel Orientation="Horizontal" Clicked="{deviceClicked}" ItemSpacing="10" Margin="10,0">
+					<Text Value="{NAME}" Color="#060717" />
+					<Text Value="{ADDRESS}" Color="#919191" />
+				</StackPanel>
+			</Each>
+			
+			<Rectangle Color="Black" Height="1" />
+
+			<DockPanel>
+				<Text Color="#808080" FontSize="20" Margin="10,0" Dock="Left">Available device</Text>
+				<!-- <Button Height="40" Width="100" Color="#5D6BA9" Text="블루투스 검색" Clicked="{scanStart}" Dock="Right" /> -->
+				<Component.SearchBtn Path="../Assets/search_bt_1.png" Path2="../Assets/search_bt_2.png" Clicked="{scanStart}" Dock="Right" />
+			</DockPanel>
+
+			
+			<Each Items="{scanDvices}">
+				<StackPanel Orientation="Horizontal" Clicked="{scanDeviceClicked}" ItemSpacing="10" Margin="10,0">
+					<Text Value="{NAME}" Color="#060717" />
+					<Text Value="{ADDRESS}" Color="#919191" />
+				</StackPanel>
+			</Each>	
+			
+		</StackPanel>
+		</ScrollView>
+	</Rectangle>
+	<Rectangle>
+        <LinearGradient>
+            <GradientStop Offset="0" Color="#53CCE3" />
+            <GradientStop Offset="1" Color="#0262A7" />
+        </LinearGradient>
+    </Rectangle>
+</Panel>

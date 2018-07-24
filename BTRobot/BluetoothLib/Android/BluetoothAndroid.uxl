@@ -1,0 +1,8 @@
+<Extensions Backend="CPlusPlus" Condition="Android">
+    <Require AndroidManifest.ActivityElement><![CDATA[
+		<intent-filter>
+			<action android:name="BluetoothDevice.ACTION_FOUND"/>
+			<category android:name="android.intent.category.DEFAULT"/>
+		</intent-filter>
+    ]]></Require>
+</Extensions>
