@@ -104,6 +104,10 @@ namespace Fuse.Bluetooth.Android
 							Log.d("BluetoothAndroid", (String)msg.obj);
 							@{BluetoothAndroid.ConnectEventMsg:Set((String)msg.obj)};
 							break;
+						case BluetoothControl.READ_DATA : //디바이스 연결
+							Log.d("BluetoothAndroid", (String)msg.obj);
+							@{BluetoothAndroid.RecevieDatamsg:Set((String)msg.obj)};
+							break;	
 						default:
 		                    break;
 		            }
@@ -131,7 +135,7 @@ namespace Fuse.Bluetooth.Android
 		[Foreign(Language.Java)]
 		public String GetListPairedDevice() 
 		@{
-            Log.d("Bluetooth","ScanStart  ");
+            Log.d("Bluetooth","GetListPairedDevice  ");
 			BluetoothControl bleControl = (BluetoothControl)@{BluetoothAndroid._bluetoothAndroid:Get()};
 
 			return bleControl.GetListPairedDevice();
@@ -140,7 +144,7 @@ namespace Fuse.Bluetooth.Android
 		[Foreign(Language.Java)]
 		public void PairingDevice(String addr) 
 		@{
-            Log.d("Bluetooth","ScanStart  ");
+            Log.d("Bluetooth","PairingDevice  ");
 			BluetoothControl bleControl = (BluetoothControl)@{BluetoothAndroid._bluetoothAndroid:Get()};
 			
 			bleControl.pairingDevice(addr);
@@ -158,7 +162,7 @@ namespace Fuse.Bluetooth.Android
 		[Foreign(Language.Java)]
 		public bool Write(String data) 
 		@{
-            Log.d("Bluetooth","ScanStart  ");
+            Log.d("Bluetooth","Write  ");
 			BluetoothControl bleControl = (BluetoothControl)@{BluetoothAndroid._bluetoothAndroid:Get()};
 
 			return bleControl.write(data);
@@ -216,6 +220,22 @@ namespace Fuse.Bluetooth.Android
                	onConnectMessageEvent(myArgs);
             }
        	}	
+
+		//연결이벤트 (Custom Event) 처리 (msdn참조)
+		public delegate void recevieDataHandler(MessageEventArgs myArgs);
+        static String recevieDatamsg; 
+
+        public static event recevieDataHandler onRecevieDataEvent;
+
+		static String RecevieDatamsg
+        {
+        	set 
+         	{
+               	recevieDatamsg = value;
+            	MessageEventArgs myArgs = new MessageEventArgs(recevieDatamsg);
+               	onRecevieDataEvent(myArgs);
+            }
+       	}	   
 
 	}
 }

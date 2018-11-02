@@ -19,5 +19,6 @@
 	<StackPanel Orientation="Horizontal" Alignment="HorizontalCenter">
 		<Component.LBtn ux:Name="r" Path="../Assets/red_bt_1.png" Path2="../Assets/red_bt_2.png"/>
 		<Component.LBtn ux:Name="b" Path="../Assets/blue_bt_1.png" Path2="../Assets/blue_bt_2.png"/>
+		<Component.LBtn ux:Name="c" Path="../Assets/blue_bt_1.png" Path2="../Assets/blue_bt_2.png"/>
 	</StackPanel>
 </StackPanel>

@@ -17,6 +17,7 @@ import android.util.Log;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.SystemClock;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -53,7 +55,7 @@ public class BluetoothControl extends AppCompatActivity {
 	private ExecutorService mReadExecutor; 
 	private ExecutorService mWriteExecutor;
     private ExecutorService mHanlerExecutor;
-	private Handler mMainHandler = new Handler(Looper.getMainLooper());
+	//private Handler mMainHandler = new Handler(Looper.getMainLooper());
 	private BluetoothDevice mConnectedDevice = null;
 	private InputStream mInputStream;
 	private OutputStream mOutputStream;
@@ -71,6 +73,8 @@ public class BluetoothControl extends AppCompatActivity {
 
     public static final  int DEVICE_SCAN = 10;
     public static final  int DEVICE_CONNECT = 20;
+    public static final  int READ_DATA = 30;
+
     Handler mHandler;
 
      public BluetoothControl(Activity activity, Handler handler) {
@@ -377,7 +381,7 @@ public class BluetoothControl extends AppCompatActivity {
 					mBluetoothAdapter.cancelDiscovery();
 					mBluetoothSocket.connect();
 					manageConnectedSocket(mBluetoothSocket);
-	            	//mReadExecutor.execute(mReadRunnable);
+	            	mReadExecutor.execute(mReadRunnable);
 
                     connectResult("connected");
 	            } catch (final IOException e) {
@@ -433,6 +437,33 @@ public class BluetoothControl extends AppCompatActivity {
 		});
 		return true;
 	}
+
+    private Runnable mReadRunnable = new Runnable() {
+		@Override
+		public void run() {
+            byte[] buffer = new byte[256];  // buffer store for the stream
+            int bytes; // bytes returned from read()
+            //String readMessage = null;
+			try {
+				bytes = mInputStream.available();
+                   
+                if(bytes != 0) {
+                    SystemClock.sleep(100); //pause and wait for rest of data. Adjust this depending on your sending speed.
+                    bytes = mInputStream.read(buffer);
+                    String readMessage = new String(buffer, 0, bytes);
+                    //Log.d(">>>>>>>>>>>>>>>", readMessage);
+
+                    Message message = Message.obtain(mHandler, READ_DATA, readMessage);
+                    mHandler.sendMessage(message);
+                }
+                mReadExecutor.execute(mReadRunnable);
+            } catch (Exception e) {
+                close();
+                e.printStackTrace();
+            } 
+            
+		}
+	};
 
     private boolean close() {
 		mConnectedDevice = null;

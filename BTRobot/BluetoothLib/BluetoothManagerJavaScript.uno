@@ -12,7 +12,7 @@ namespace Fuse.Bluetooth
 	{
 		static readonly BluetoothJavaScript _instance;
 		
-		public BluetoothJavaScript() : base(true, "deviceConnected", "scanDiscovered")
+		public BluetoothJavaScript() : base(true, "deviceConnected", "scanDiscovered", "recevieData")
 		{
 			if(_instance != null) return;
 			
@@ -22,18 +22,25 @@ namespace Fuse.Bluetooth
 			AddMember(new NativeFunction("pairingDevice", (NativeCallback)PairingDevice));
 			AddMember(new NativeFunction("connect", (NativeCallback)Connect));
 			AddMember(new NativeFunction("write", (NativeCallback)Write));
+			
 			var scanDiscovered = new NativeEvent("scanDiscovered");
 			On("scanDiscovered", scanDiscovered);
 			AddMember(scanDiscovered);
+			
 			var deviceConnected = new NativeEvent("deviceConnected");
 			On("deviceConnected", deviceConnected);
 			AddMember(deviceConnected);
+
+			var recevieData = new NativeEvent("recevieData");
+			On("recevieData", recevieData);
+			AddMember(recevieData);
 			
 			
 			if defined(ANDROID){
 				//핸들러 처리 후 이벤트 처리 선언 (msdn 참조)
 				BluetoothAndroid.onScanMessageEvent += new BluetoothAndroid.scanEventHandler(scanMessage);
 				BluetoothAndroid.onConnectMessageEvent += new BluetoothAndroid.connectEventHandler(connectMessage);
+				BluetoothAndroid.onRecevieDataEvent += new BluetoothAndroid.recevieDataHandler(recevieDataMessage);
 			}
 		}
 
@@ -108,6 +115,17 @@ namespace Fuse.Bluetooth
 		    debug_log("connectMessage : "+msg);
 			if (msg != null){
 			    deviceConnected(msg);
+			}
+		}
+
+		//연결 후 이벤트 핸들러 
+		void recevieDataMessage(MessageEventArgs e)
+		{
+			String msg = e.Message;
+
+		    debug_log("recevieDataMessage : "+msg);
+			if (msg != null){
+			  // Emit("recevieData", msg);
 			}
 		}
 	}

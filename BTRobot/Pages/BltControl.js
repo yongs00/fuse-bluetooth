@@ -11,6 +11,12 @@ function btnClicked(args) {
 	var result = Bluetooth.write(args.sender);
 };
 
+//디바이스 스캔 이벤트
+Bluetooth.recevieData = function(message) {
+	console.log("Bluetooth.recevieData  " + message);
+	
+};
+
 module.exports = {
 	btnClicked
 };
